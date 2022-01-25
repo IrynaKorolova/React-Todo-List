@@ -1,25 +1,33 @@
+import { useState } from "react";
 import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
   const [, setTodos] = useTodos();
-
+  const [title, setTitle] = useState("");
   function createTodo(event) {
     event.preventDefault();
-
     const newTodo = {
       id: Date.now(),
-      title: event.target.title.value.trim(),
+      title,
       createdAt: Date.now(),
       updatedAt: null,
       completed: false,
     };
-
     setTodos((todos) => [...todos, newTodo]);
-    event.target.reset();
+    setTitle("");
+  }
+  function handleChangeTitle(event) {
+    setTitle(event.target.value.trim());
   }
   return (
     <form onSubmit={createTodo}>
-      <input type="text" name="title" placeholder="Todo title" />
+      <input
+        value={title}
+        onChange={handleChangeTitle}
+        type="text"
+        name="title"
+        placeholder="Todo title"
+      />
       <button type="submit">Add</button>
     </form>
   );
