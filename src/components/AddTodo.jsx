@@ -17,18 +17,22 @@ export default function AddTodo() {
     setTitle("");
   }
   function handleChangeTitle(event) {
-    setTitle(event.target.value.trim());
+    setTitle(event.target.value);
   }
   return (
-    <form onSubmit={createTodo}>
-      <input
-        value={title}
-        onChange={handleChangeTitle}
-        type="text"
-        name="title"
-        placeholder="Todo title"
-      />
-      <button type="submit">Add</button>
-    </form>
+      <form className="form" onSubmit={createTodo}>
+      <h1 className="todo-heading">To-Do List <span>&#10004;</span></h1>
+      <h2 className="todo-subheading">What`s The Plan For Today?</h2>
+        <input className="todo-input"
+          value={title}
+          onChange={handleChangeTitle}
+          type="text"
+          name="title"
+          placeholder="Todo title"
+        />
+        <button className="btn" type="submit">
+          Add
+        </button>
+      </form>
   );
 }
