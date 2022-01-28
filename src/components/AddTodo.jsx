@@ -1,38 +1,59 @@
 import { useState } from "react";
+import { createTodo } from "../api/todos";
 import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
   const [, setTodos] = useTodos();
   const [title, setTitle] = useState("");
-  function createTodo(event) {
+  const [titleError, setTitleError] = useState(null);
+  const [createError, setCreateError] = useState(null);
+
+  async function addTodo(event) {
     event.preventDefault();
+    if (!title) {
+      setTitleError("Title is empty!");
+      return;
+    }
     const newTodo = {
-      id: Date.now(),
       title,
       createdAt: Date.now(),
       updatedAt: null,
       completed: false,
     };
-    setTodos((todos) => [...todos, newTodo]);
-    setTitle("");
+
+    //create
+    setCreateError(null);
+    const [createdTodoError, createdTodo] = await createTodo(newTodo);
+    if (createdTodo) {
+      setTodos((todos) => [...todos, createdTodo]);
+      setTitle("");
+    } else {
+      setCreateError("Creating todo failed! Try again.");
+      console.error("createdTodoError", createdTodoError);
+    }
   }
+
   function handleChangeTitle(event) {
     setTitle(event.target.value);
+    setTitleError(null);
+    setCreateError(null);
   }
+
   return (
-      <form className="form" onSubmit={createTodo}>
-      <h1 className="todo-heading">To-Do List <span>&#10004;</span></h1>
-      <h2 className="todo-subheading">What`s The Plan For Today?</h2>
-        <input className="todo-input"
-          value={title}
-          onChange={handleChangeTitle}
-          type="text"
-          name="title"
-          placeholder="Todo title"
-        />
-        <button className="btn" type="submit">
-          Add
-        </button>
-      </form>
+    <form className="form" onSubmit={addTodo}>
+      <p style={{ color: "red" }}>{createError}</p>
+      <input
+        className="todo-input"
+        value={title}
+        onChange={handleChangeTitle}
+        type="text"
+        name="title"
+        placeholder="Todo title"
+      />
+      {titleError && <p style={{ color: "red" }}>{titleError}</p>}
+      <button className="btn" type="submit">
+        Add
+      </button>
+    </form>
   );
 }
