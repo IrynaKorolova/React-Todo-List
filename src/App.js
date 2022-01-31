@@ -14,7 +14,7 @@ function App() {
   // }, []);
 
   return (
-    <div className="container">
+    <div className="container inner">
       <h1 className="todo-heading">
         To-Do List <span>&#10004;</span>
       </h1>

@@ -13,11 +13,15 @@ body {
 .container {
   max-width: 600px;
   min-height: 800px;
+  margin: 100px auto;
+
+}
+
+.inner{
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #441d68;
-  margin: 100px auto;
   border-radius: 10px;
 }
 
@@ -39,11 +43,14 @@ span {
   color: pink;
 }
 
+.todo-title{
+  text-transform: uppercase;
+}
+
 .todo-input {
   padding: 14px 32px 14px 16px;
   border-radius: 4px 0 0 4px;
-  border: 2px solid #5d0cff;
-  outline: none;
+  border: 2px solid #5d0cff;  
   width: 350px;
   background: transparent;
   color: #fff;
@@ -60,7 +67,6 @@ span {
   border: none;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
-  outline: none;
   background: linear-gradient(90deg,
       rgb(89, 7, 252) 0%,
       rgb(117, 2, 189) 100%);
@@ -112,4 +118,9 @@ span {
   background: transparent;
   color: #fff;
   margin-top: 15px;
+}
+
+.alert{
+  margin: 15px 0;
+  color:red;
 }

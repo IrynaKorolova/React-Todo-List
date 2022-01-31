@@ -1,19 +1,29 @@
- import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
+import { getTodos } from "../api/todos";
 
- const initialState = JSON.parse(localStorage.getItem("todos")) || [];
+const initialState = []; //???
 
- export const TodosContext = createContext(initialState);
+export const TodosContext = createContext(initialState);
 
-  export default function TodosProvider({ children }) {
-    const [todos, setTodos] = useState(initialState);
-   //get
+export default function TodosProvider({ children }) {
+  const [todos, setTodos] = useState(initialState);
+  //get
+
    useEffect(() => {
-     localStorage.setItem("todos", JSON.stringify(todos));
-   }, [todos]);
+      (async function () {
+        const [todosError, todos] = await getTodos();
+        if (todosError) {
+        console.error('error');
+        } else {
+          console.log(todos)
+        }
+      })();
+    }, []);
 
-    return (
-      <TodosContext.Provider value={[todos, setTodos]}>
-       {children}
-     </TodosContext.Provider>
-    );
-  }
+
+  return (
+    <TodosContext.Provider value={[todos, setTodos]}>
+      {children}
+    </TodosContext.Provider>
+  );
+}

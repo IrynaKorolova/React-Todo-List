@@ -8,10 +8,7 @@ export default function Todo({ todo }) {
 
   //DELETE
   async function remove() {
-    const [deletedTodo] = await deleteTodo(todo.id);
-    if (deletedTodo) {
-      setTodos((todos) => [...todos, deletedTodo]);
-    }
+     await deleteTodo(todo.id);
     setTodos((todos) => todos.filter((savedTodo) => savedTodo.id !== todo.id));
   }
 
@@ -43,7 +40,7 @@ export default function Todo({ todo }) {
 
   return (
     <div className="todo">
-      <h2>{todo.title}</h2>
+      <h2 className="todo-title">{todo.title}</h2>
       <h3 className="todo-completed">
         Completed: {todo.completed ? "Yes" : "No"}
       </h3>

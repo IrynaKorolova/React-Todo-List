@@ -3,7 +3,7 @@ import { createTodo } from "../api/todos";
 import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
-  const [, setTodos] = useTodos();
+  const [, setTodos] = useTodos(); 
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState(null);
   const [createError, setCreateError] = useState(null);
@@ -41,7 +41,8 @@ export default function AddTodo() {
 
   return (
     <form className="form" onSubmit={addTodo}>
-      <p style={{ color: "red" }}>{createError}</p>
+      {titleError && <p className="alert">{titleError}</p>}
+      <p className="alert">{createError}</p>
       <input
         className="todo-input"
         value={title}
@@ -50,7 +51,7 @@ export default function AddTodo() {
         name="title"
         placeholder="Todo title"
       />
-      {titleError && <p style={{ color: "red" }}>{titleError}</p>}
+
       <button className="btn" type="submit">
         Add
       </button>
