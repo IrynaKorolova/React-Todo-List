@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { BASE_URL } from './config';
+import axios from "axios";
+import { BASE_URL } from "./config";
 
 const todosApi = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'content-type': 'application/json; charset=utf-8',
+    "content-type": "application/json; charset=utf-8",
   },
   timeout: 1000,
 });

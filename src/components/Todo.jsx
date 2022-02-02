@@ -1,41 +1,50 @@
 import { useState } from "react";
 import { useTodos } from "../hooks/useTodos";
-import { deleteTodo } from "../api/todos";
+import { deleteTodo, updateTodo } from "../api/todos";
+import { REMOVE, UPDATE } from "../context/TodosContext";
 
 export default function Todo({ todo }) {
-  const [, setTodos] = useTodos();
+  const [, dispatchTodos] = useTodos();
   const [showEdit, setShowEdit] = useState(false);
 
   //DELETE
   async function remove() {
-     await deleteTodo(todo.id);
-    setTodos((todos) => todos.filter((savedTodo) => savedTodo.id !== todo.id));
+    const [deletedTodoError] = await deleteTodo(todo.id);
+    if (!deletedTodoError) {
+      dispatchTodos({ type: REMOVE, payload: todo.id });
+    } else {
+      alert("Deleting todo failed!");
+    }
   }
 
-  function complete() {
+  async function complete() {
     //update
-
-    setTodos((todos) => {
-      const todosCopy = JSON.parse(JSON.stringify(todos));
-      const currentTodo = todosCopy.find((item) => item.id === todo.id);
-      currentTodo.completed = true;
-      return todosCopy;
+    const [updatedTodoError, updatedTodo] = await updateTodo(todo.id, {
+      completed: true,
     });
+    if (updatedTodo) {
+      dispatchTodos({ type: UPDATE, payload: updatedTodo });
+    } else {
+      console.error("updatedTodoError", updatedTodoError);
+    }
   }
 
-  function edit(event) {
+  async function edit(event) {
     event.preventDefault();
     const newTitle = event.target.title.value.trim();
-
     //update
-
-    setTodos((todos) => {
-      const todosCopy = JSON.parse(JSON.stringify(todos));
-      const currentTodo = todosCopy.find((item) => item.id === todo.id);
-      currentTodo.title = newTitle;
-      return todosCopy;
+    if (!newTitle) {
+      return;
+    }
+    const [updatedTodoError, updatedTodo] = await updateTodo(todo.id, {
+      title: newTitle,
     });
-    setShowEdit(false);
+    if (updatedTodo) {
+      dispatchTodos({ type: UPDATE, payload: updatedTodo });
+      setShowEdit(false);
+    } else {
+      console.error("updatedTodoError", updatedTodoError);
+    }
   }
 
   return (

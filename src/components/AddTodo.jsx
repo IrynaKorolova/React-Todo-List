@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { createTodo } from "../api/todos";
+import { ADD } from "../context/TodosContext";
 import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
-  const [, setTodos] = useTodos(); 
+  const [, dispatchTodos] = useTodos();
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState(null);
   const [createError, setCreateError] = useState(null);
@@ -25,7 +26,7 @@ export default function AddTodo() {
     setCreateError(null);
     const [createdTodoError, createdTodo] = await createTodo(newTodo);
     if (createdTodo) {
-      setTodos((todos) => [...todos, createdTodo]);
+      dispatchTodos({ type: ADD, payload: createdTodo });
       setTitle("");
     } else {
       setCreateError("Creating todo failed! Try again.");
