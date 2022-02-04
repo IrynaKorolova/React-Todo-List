@@ -12,7 +12,7 @@ export const UPDATE = "UPDATE";
 
 export default function TodosProvider({ children }) {
   const [todos, dispatchTodos] = useReducer(todosReducer, initialState);
-  //get
+
   useEffect(() => {
     (async function () {
       const [todosError, todos] = await getTodos();

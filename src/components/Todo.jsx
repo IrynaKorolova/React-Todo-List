@@ -7,7 +7,6 @@ export default function Todo({ todo }) {
   const [, dispatchTodos] = useTodos();
   const [showEdit, setShowEdit] = useState(false);
 
-  //DELETE
   async function remove() {
     const [deletedTodoError] = await deleteTodo(todo.id);
     if (!deletedTodoError) {
@@ -18,7 +17,6 @@ export default function Todo({ todo }) {
   }
 
   async function complete() {
-    //update
     const [updatedTodoError, updatedTodo] = await updateTodo(todo.id, {
       completed: true,
     });
@@ -32,7 +30,7 @@ export default function Todo({ todo }) {
   async function edit(event) {
     event.preventDefault();
     const newTitle = event.target.title.value.trim();
-    //update
+
     if (!newTitle) {
       return;
     }

@@ -22,7 +22,6 @@ export default function AddTodo() {
       completed: false,
     };
 
-    //create
     setCreateError(null);
     const [createdTodoError, createdTodo] = await createTodo(newTodo);
     if (createdTodo) {

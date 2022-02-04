@@ -17,7 +17,7 @@ body {
 
 }
 
-.inner{
+.inner {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,14 +43,14 @@ span {
   color: pink;
 }
 
-.todo-title{
+.todo-title {
   text-transform: uppercase;
 }
 
 .todo-input {
   padding: 14px 32px 14px 16px;
   border-radius: 4px 0 0 4px;
-  border: 2px solid #5d0cff;  
+  border: 2px solid #5d0cff;
   width: 350px;
   background: transparent;
   color: #fff;
@@ -105,7 +105,7 @@ span {
   margin: 12px 0;
 }
 
-.list-item{
+.list-item {
   margin-top: 15px;
 }
 
@@ -120,7 +120,7 @@ span {
   margin-top: 15px;
 }
 
-.alert{
+.alert {
   margin: 15px 0;
-  color:red;
+  color: red;
 }

@@ -4,15 +4,6 @@ import TodoList from "./components/TodoList";
 import TodosProvider from "./context/TodosContext";
 
 function App() {
-  // useEffect(() => {
-  //   (async function () {
-  //     const [todosError, todos] = await getTodos()
-  //     if (!todosError) {
-  //       console.log(todos);
-  //     }
-  //   })()
-  // }, []);
-
   return (
     <div className="container inner">
       <h1 className="todo-heading">
