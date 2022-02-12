@@ -1,29 +1,37 @@
 import { useState } from "react";
 import { useTodos } from "../hooks/useTodos";
-import { deleteTodo, updateTodo } from "../api/todos";
-import { REMOVE, UPDATE } from "../context/TodosContext";
+import todoService from "../api/todos";
+import { removeTodo, updateTodo } from "../context/TodosContext";
+import { nextBtnText, statusText, priorityText } from "../helpers/todos";
 
 export default function Todo({ todo }) {
   const [, dispatchTodos] = useTodos();
   const [showEdit, setShowEdit] = useState(false);
 
   async function remove() {
-    const [deletedTodoError] = await deleteTodo(todo.id);
+    const [deletedTodoError] = await todoService.deleteTodo(todo.id);
     if (!deletedTodoError) {
-      dispatchTodos({ type: REMOVE, payload: todo.id });
+      dispatchTodos(removeTodo(todo.id));
     } else {
       alert("Deleting todo failed!");
     }
   }
 
-  async function complete() {
-    const [updatedTodoError, updatedTodo] = await updateTodo(todo.id, {
-      completed: true,
-    });
-    if (updatedTodo) {
-      dispatchTodos({ type: UPDATE, payload: updatedTodo });
+  async function setNextStatus() {
+    if (todo.status < 2) {
+      const [updatedTodoError, updatedTodo] = await todoService.updateTodo(
+        todo.id,
+        {
+          status: todo.status + 1,
+        }
+      );
+      if (updatedTodo) {
+        dispatchTodos(updateTodo(updatedTodo));
+      } else {
+        console.error("updatedTodoError", updatedTodoError);
+      }
     } else {
-      console.error("updatedTodoError", updatedTodoError);
+      remove();
     }
   }
 
@@ -34,11 +42,14 @@ export default function Todo({ todo }) {
     if (!newTitle) {
       return;
     }
-    const [updatedTodoError, updatedTodo] = await updateTodo(todo.id, {
-      title: newTitle,
-    });
+    const [updatedTodoError, updatedTodo] = await todoService.updateTodo(
+      todo.id,
+      {
+        title: newTitle,
+      }
+    );
     if (updatedTodo) {
-      dispatchTodos({ type: UPDATE, payload: updatedTodo });
+      dispatchTodos(updateTodo(updatedTodo));
       setShowEdit(false);
     } else {
       console.error("updatedTodoError", updatedTodoError);
@@ -48,8 +59,9 @@ export default function Todo({ todo }) {
   return (
     <div className="todo">
       <h2 className="todo-title">{todo.title}</h2>
+      <h3 className="todo-completed">Status: {statusText[todo.status]}</h3>
       <h3 className="todo-completed">
-        Completed: {todo.completed ? "Yes" : "No"}
+        Priority: {priorityText[todo.priority]}
       </h3>
       <ul className="todo-list">
         <li>Created at: {new Date(todo.createdAt).toLocaleString()}</li>
@@ -58,12 +70,10 @@ export default function Todo({ todo }) {
           {todo.updatedAt ? new Date(todo.updatedAt).toLocaleString() : "-"}
         </li>
       </ul>
+      <p className="todo-text">{todo.body}</p>
       <div className="btn-group">
-        <button className="btn todo-btn" onClick={complete}>
-          Complete <span>&#10003;</span>
-        </button>
-        <button className="btn todo-btn" onClick={remove}>
-          Delete <span>&#10005;</span>
+        <button className="btn todo-btn" onClick={setNextStatus}>
+          {nextBtnText[todo.status]} <span>&#10003;</span>
         </button>
         {!showEdit && (
           <button className="btn todo-btn" onClick={() => setShowEdit(true)}>

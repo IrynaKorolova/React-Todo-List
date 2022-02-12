@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { createTodo } from "../api/todos";
-import { ADD } from "../context/TodosContext";
+import todoService from "../api/todos";
+import { addTodo } from "../context/TodosContext";
 import { useTodos } from "../hooks/useTodos";
 
 export default function AddTodo() {
   const [, dispatchTodos] = useTodos();
   const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [priority, setPriority] = useState(1);
   const [titleError, setTitleError] = useState(null);
   const [createError, setCreateError] = useState(null);
 
-  async function addTodo(event) {
+  async function addNewTodo(event) {
     event.preventDefault();
     if (!title) {
       setTitleError("Title is empty!");
@@ -17,15 +19,19 @@ export default function AddTodo() {
     }
     const newTodo = {
       title,
+      body,
+      priority: Number(priority),
       createdAt: Date.now(),
       updatedAt: null,
-      completed: false,
+      status: 0,
     };
 
     setCreateError(null);
-    const [createdTodoError, createdTodo] = await createTodo(newTodo);
+    const [createdTodoError, createdTodo] = await todoService.createTodo(
+      newTodo
+    );
     if (createdTodo) {
-      dispatchTodos({ type: ADD, payload: createdTodo });
+      dispatchTodos(addTodo(createdTodo));
       setTitle("");
     } else {
       setCreateError("Creating todo failed! Try again.");
@@ -40,7 +46,7 @@ export default function AddTodo() {
   }
 
   return (
-    <form className="form" onSubmit={addTodo}>
+    <form className="form" onSubmit={addNewTodo}>
       {titleError && <p className="alert">{titleError}</p>}
       <p className="alert">{createError}</p>
       <input
@@ -51,10 +57,29 @@ export default function AddTodo() {
         name="title"
         placeholder="Todo title"
       />
+      <textarea
+        className="todo-input"
+        name="body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        rows="5"
+        cols="50"
+      ></textarea>
+      <select
+        className="select"
+        name="priority"
+        value={priority}
+        onChange={(e) => setPriority(e.target.value)}
+      >
+        <option value="2">High</option>
+        <option value="1">Regular</option>
+        <option value="0">Low</option>
+      </select>
 
-      <button className="btn" type="submit">
-        Add
+      <button className="btn add-btn" type="submit">
+        Add ToDo
       </button>
     </form>
   );
 }
+

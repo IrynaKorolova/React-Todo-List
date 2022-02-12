@@ -1,10 +1,10 @@
-import axios from "axios";
-import { BASE_URL } from "./config";
+import axios from 'axios';
+import { BASE_URL } from './config';
 
 const todosApi = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "content-type": "application/json; charset=utf-8",
+    'content-type': 'application/json; charset=utf-8',
   },
   timeout: 1000,
 });
@@ -29,3 +29,12 @@ export function updateTodo(id, data) {
 export function deleteTodo(id) {
   return todosApi.delete(`/todos/${id}`);
 }
+
+export default {
+  getTodo,
+  getTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+};
+

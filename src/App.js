@@ -9,7 +9,7 @@ function App() {
       <h1 className="todo-heading">
         To-Do List <span>&#10004;</span>
       </h1>
-      <h2 className="todo-subheading">What`s The Plan For Today?</h2>
+      <h2 className="todo-subheading">What's The Plan For Today?</h2>
       <TodosProvider>
         <AddTodo />
         <TodoList />

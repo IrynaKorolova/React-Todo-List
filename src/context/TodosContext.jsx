@@ -1,34 +1,30 @@
-import { createContext, useReducer, useEffect } from "react";
-import { getTodos } from "../api/todos";
+import { createContext, useReducer, useEffect } from 'react';
+import todoService from '../api/todos';
 
 const initialState = [];
 
 export const TodosContext = createContext(initialState);
 
-export const SET = "SET";
-export const ADD = "ADD";
-export const REMOVE = "REMOVE";
-export const UPDATE = "UPDATE";
+export const SET = 'SET';
+export const ADD = 'ADD';
+export const REMOVE = 'REMOVE';
+export const UPDATE = 'UPDATE';
 
 export default function TodosProvider({ children }) {
   const [todos, dispatchTodos] = useReducer(todosReducer, initialState);
 
   useEffect(() => {
     (async function () {
-      const [todosError, todos] = await getTodos();
+      const [todosError, todos] = await todoService.getTodos();
       if (todosError) {
-        console.error("error");
+        console.error('error');
       } else {
         console.log(todos);
-        dispatchTodos({ type: SET, payload: todos });
+        dispatchTodos(setTodos(todos));
       }
     })();
   }, []);
-  return (
-    <TodosContext.Provider value={[todos, dispatchTodos]}>
-      {children}
-    </TodosContext.Provider>
-  );
+  return <TodosContext.Provider value={[todos, dispatchTodos]}>{children}</TodosContext.Provider>;
 }
 
 function todosReducer(todos, action) {
@@ -45,9 +41,7 @@ function todosReducer(todos, action) {
       }
       case UPDATE: {
         const todosCopy = [...todos];
-        const updatedTodoIdx = todosCopy.findIndex(
-          (todo) => todo.id === action.payload.id
-        );
+        const updatedTodoIdx = todosCopy.findIndex((todo) => todo.id === action.payload.id);
         todosCopy.splice(updatedTodoIdx, 1, action.payload);
         return todosCopy;
       }
@@ -58,4 +52,17 @@ function todosReducer(todos, action) {
     console.warn(error);
     return todos;
   }
+}
+
+export function setTodos(todos) {
+  return { type: SET, payload: todos };
+}
+export function addTodo(newTodo) {
+  return { type: ADD, payload: newTodo };
+}
+export function removeTodo(todoId) {
+  return { type: REMOVE, payload: todoId };
+}
+export function updateTodo(updatedTodo) {
+  return { type: UPDATE, payload: updatedTodo };
 }
