@@ -59,10 +59,14 @@ export default function Todo({ todo }) {
   return (
     <div className="todo">
       <h2 className="todo-title">{todo.title}</h2>
+      <div className="todo-wrap">
+      <div className="todo-inner">
       <h3 className="todo-completed">Status: {statusText[todo.status]}</h3>
       <h3 className="todo-completed">
         Priority: {priorityText[todo.priority]}
       </h3>
+      </div>
+      <div className="todo-inner-list">
       <ul className="todo-list">
         <li>Created at: {new Date(todo.createdAt).toLocaleString()}</li>
         <li className="list-item">
@@ -70,6 +74,8 @@ export default function Todo({ todo }) {
           {todo.updatedAt ? new Date(todo.updatedAt).toLocaleString() : "-"}
         </li>
       </ul>
+      </div>
+      </div>
       <p className="todo-text">{todo.body}</p>
       <div className="btn-group">
         <button className="btn todo-btn" onClick={setNextStatus}>
